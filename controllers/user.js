@@ -1,3 +1,6 @@
+/*jslint node: true */
+"use strict";
+
 const async = require('async');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');

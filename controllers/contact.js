@@ -1,3 +1,6 @@
+/*jslint node: true */
+"use strict";
+
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({

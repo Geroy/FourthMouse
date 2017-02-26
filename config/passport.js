@@ -1,3 +1,6 @@
+/*jslint node: true */
+"use strict";
+
 const _ = require('lodash');
 const passport = require('passport');
 const request = require('request');
