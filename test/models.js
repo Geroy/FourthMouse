@@ -1,3 +1,6 @@
+/*jslint node: true */
+"use strict";
+
 const mongoose = require('mongoose');
 const {expect} = require('chai');
 const sinon = require('sinon');

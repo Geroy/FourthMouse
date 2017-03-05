@@ -6,9 +6,10 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(name='theme-color' content='#4DA5F4')
     meta(name='csrf-token', content=_csrf)
-    title #{title} - Hackathon Starter
-    link(rel='shortcut icon', href='/favicon.png')
+    title #{title} - Fourth Mouse
+    link(rel='shortcut icon', href='/images/Simple_Mouse_Black_White_Art.svg')
     link(rel='stylesheet', href='/css/main.css')
+    link(rel='images', href='/images')
 
   body
     include partials/header
@@ -19,7 +20,8 @@ html
 
     include partials/footer
 
-    script(src='/js/lib/jquery-3.1.1.min.js')
+    //  bootstrap requires jQuery version at least 1.7 and less than 3
+    script(src='/js/lib/jquery.min.js')
     script(src='/js/lib/bootstrap.min.js')
     script(src='/js/main.js')
 

@@ -1,8 +1,6 @@
 @import "themes/default/variables";
-
 @import "lib/bootstrap/bootstrap";
 @import "lib/font-awesome/font-awesome";
-
 @import "themes/default/default";
 
 // Scaffolding
@@ -67,4 +65,16 @@ textarea {
 
 .fa {
   margin-right: 6px;
+}
+
+
+// Logo
+// -------------------------
+.logo {
+  display: block;
+  text-indent: -9999px;
+  width: 100px;
+  height: 82px;
+  background: url(../images/Simple_Mouse_Black_White_Art.svg);
+  background-size: 100px 82px;
 }
