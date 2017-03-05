@@ -9,11 +9,11 @@ const profileSchema = new mongoose.Schema({
     location: String,
     website: String,
     picture: String,
-    likes: {
+    interests: [{
         category: String,
         item: String,
         importance: Number,
-    }
+    }]
 }, {timestamps: true});
 
 const Profile = mongoose.model('Profile', profileSchema);
