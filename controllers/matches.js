@@ -13,3 +13,15 @@ exports.getMatches = (req, res) => {
         title: 'Matches'
     });
 };
+
+/**
+ * POST /
+ * Matches Page.
+ */
+exports.postMatches = (req, res, next) => {
+    if (!req.user) {
+        return res.redirect('/login');
+    }
+
+    // Update the match with the changed information
+};

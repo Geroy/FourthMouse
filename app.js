@@ -136,7 +136,11 @@ app.post('/account/profile', passportConfig.isAuthenticated, userController.post
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
-app.get('/matches', passportConfig.isAuthenticated, matchesController.getMatches);
+
+app.route('/matches')
+    .all(passportConfig.isAuthenticated)
+    .get(matchesController.getMatches)
+    .post(matchesController.postMatches);
 
 /**
  * API examples routes.
