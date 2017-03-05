@@ -44,13 +44,6 @@ describe('GET /contact', () => {
     });
 });
 
-describe('GET /matches', () => {
-    it('should return 200 OK', (done) => {
-        request(app)
-            .get('/matches')
-            .expect(200, done);
-    });
-});
 
 describe('GET /random-url', () => {
     it('should return 404', (done) => {
@@ -59,3 +52,5 @@ describe('GET /random-url', () => {
             .expect(404, done);
     });
 });
+
+// TODO: logged in routes

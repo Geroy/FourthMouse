@@ -21,11 +21,11 @@ const userSchema = new mongoose.Schema({
         location: String,
         website: String,
         picture: String,
-        likes: {
+        interests: [{
             category: String,
             item: String,
             importance: Number,
-        }
+        }]
     },
 
     // message aggregation: http://stackoverflow.com/questions/26486522/mongoose-how-can-i-get-a-list-of-conversations-a-sepcific-user-has-chatted-with
@@ -33,12 +33,10 @@ const userSchema = new mongoose.Schema({
 
     ratings: [{type: mongoose.Schema.Types.ObjectId, ref: 'Rating'}],
 
-    matches:[{type: mongoose.Schema.Types.ObjectId, ref: 'Match'}],
+    matches: [{type: mongoose.Schema.Types.ObjectId, ref: 'Match'}],
 
-    reports: {
-        date: Date,
-        reason: String,
-    },
+    reports: [{type: mongoose.Schema.Types.ObjectId, ref: 'Report'}],
+
 }, {timestamps: true});
 
 /**
