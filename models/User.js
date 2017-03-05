@@ -13,19 +13,55 @@ const userSchema = new mongoose.Schema({
     instagram: String,
     facebook: String,
     google: String,
+    linkedin: String,
+    steam: String,
     tokens: Array,
 
     profile: {
         name: String,
         gender: String,
         location: String,
-        website: String,
         picture: String,
-        interests: [{
-            category: String,
-            item: String,
-            importance: Number,
-        }]
+        selfDescription: String,
+        appearance: {
+            eyeColor: String,
+            hairColor: String,
+            heightInches: Number,
+            weightPounds: Number,
+            fitnessLevel: Number,
+        },
+        ethnicity: [String],
+        language: [String],
+        religion: [String],
+        education: [String],
+        drugs: {
+            caffeine: Boolean,
+            alcohol: Boolean,
+            tobacco: Boolean,
+            other: String,
+        },
+        pets: {
+            cats: Boolean,
+            dogs: Boolean,
+            reptiles: Boolean,
+            birds: Boolean,
+            other: String,
+        },
+        astrologicalSign: String,
+        diet: String,
+
+        interests: [{type: mongoose.Schema.Types.ObjectId, ref: 'Interest'}],
+
+        matchPreferences: {
+            genderInterests: [String],
+            minAge: Number,
+            maxAge: Number,
+            relationshipTypes: [String],
+            minDistanceMiles: Number,
+            maxDistanceMiles: Number,
+            minMatchPercent: Number,
+            maxMatchPercent: Number,
+        },
     },
 
     // message aggregation: http://stackoverflow.com/questions/26486522/mongoose-how-can-i-get-a-list-of-conversations-a-sepcific-user-has-chatted-with
