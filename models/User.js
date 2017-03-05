@@ -19,27 +19,32 @@ const userSchema = new mongoose.Schema({
 
     profile: {
         name: String,
+        birthday: Date,
         gender: String,
         location: String,
         picture: String,
-        selfDescription: String,
-        appearance: {
+
+        physicalAppearance: {
             eyeColor: String,
             hairColor: String,
             heightInches: Number,
             weightPounds: Number,
             fitnessLevel: Number,
         },
+
         ethnicity: [String],
         language: [String],
         religion: [String],
         education: [String],
+
         drugs: {
             caffeine: Boolean,
             alcohol: Boolean,
             tobacco: Boolean,
+            weed: Boolean,
             other: String,
         },
+
         pets: {
             cats: Boolean,
             dogs: Boolean,
@@ -47,8 +52,14 @@ const userSchema = new mongoose.Schema({
             birds: Boolean,
             other: String,
         },
+
         astrologicalSign: String,
         diet: String,
+
+        summary: String,
+
+        messageMeIf: String,
+        doNotMessageIf: String,
 
         interests: [{type: mongoose.Schema.Types.ObjectId, ref: 'Interest'}],
 
