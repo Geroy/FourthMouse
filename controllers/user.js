@@ -1,6 +1,7 @@
 /*jslint node: true */
 "use strict";
 
+const horoscope = require('horoscope');
 const async = require('async');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
@@ -9,6 +10,8 @@ const User = require('../models/User');
 const Match = require('../models/Match');
 const Message = require('../models/Message');
 const Rating = require('../models/Rating');
+const _ = require('lodash');
+
 
 /**
  * GET /login
@@ -133,13 +136,93 @@ exports.getAccount = (req, res) => {
     });
 };
 
+
+/**
+ * Gets the astrological sign for a given user's birthday
+ * @param date
+ * @returns {string}
+ */
+function getAstrologicalSign(date){
+    var sign = '';
+
+    // Get the birthday from the user's profile
+    var birthday = new Date(date);
+    if (_.isDate(birthday)){
+        // Set the user's astrological sign based on the horoscope
+        sign = horoscope.getSign({month: birthday.getMonth(),
+            day: birthday.getDate()});
+    }
+
+    return sign;
+}
+
+/**
+ * Gets the age of the user from a given user's birthday
+ * @param date
+ * @returns {string}
+ */
+function getAgeFromBirthday(date){
+    var age = '';
+
+    // Get the birthday from the user's profile
+    var birthday = new Date(date);
+    if (_.isDate(birthday)){
+        // Set the user's astrological sign based on the horoscope
+        age = _.now().getYear() - birthday.getYear();
+    }
+
+    return age;
+}
+
 /**
  * POST /account/profile
  * Update profile information.
  */
 exports.postUpdateProfile = (req, res, next) => {
     req.assert('email', 'Please enter a valid email address.').isEmail();
+    req.assert('zipcode', 'Please enter a valid ZIP code').len(4,5).isInt();
     req.sanitize('email').normalizeEmail({remove_dots: false});
+    req.sanitizeBody('name');
+    req.sanitizeBody('birthday').toDate();
+    req.sanitizeBody('gender');
+    req.sanitizeBody('picture');
+    req.sanitizeBody('summary');
+    req.sanitizeBody('astrologicalSign');
+    req.sanitizeBody('eyeColor');
+    req.sanitizeBody('hairColor');
+    req.sanitizeBody('heightInches').toInt();
+    req.sanitizeBody('weightPounds').toInt();
+    req.sanitizeBody('fitnessLevel').toInt();
+    req.sanitizeBody('ethnicity');
+    req.sanitizeBody('language');
+    req.sanitizeBody('religion');
+    req.sanitizeBody('education');
+    req.sanitizeBody('diet');
+    req.sanitizeBody('caffeine').toBoolean();
+    req.sanitizeBody('alcohol').toBoolean();
+    req.sanitizeBody('tobacco').toBoolean();
+    req.sanitizeBody('weed').toBoolean();
+    req.sanitizeBody('otherDrugs').toBoolean();
+    req.sanitizeBody('cats').toBoolean();
+    req.sanitizeBody('dogs').toBoolean();
+    req.sanitizeBody('reptiles').toBoolean();
+    req.sanitizeBody('birds').toBoolean();
+    req.sanitizeBody('otherPets').toBoolean();
+    req.sanitizeBody('currentKids').toInt();
+    req.sanitizeBody('wantMoreKids').toBoolean();
+    req.sanitizeBody('messageMeIf');
+    req.sanitizeBody('doNotMessageIf');
+    req.sanitizeBody('genderInterests');
+    req.sanitizeBody('minAge').toInt();
+    req.sanitizeBody('maxAge').toInt();
+    req.sanitizeBody('relationshipTypes');
+    req.sanitizeBody('minDistanceMiles').toInt();
+    req.sanitizeBody('maxDistanceMiles').toInt();
+    req.sanitizeBody('minMatchPercent').toInt();
+    req.sanitizeBody('maxMatchPercent').toInt();
+
+    //TODO: we should have schemas for each one which maps to an enum or something
+    // religion enum - 1: christian, 2: jewish, etc.
 
     const errors = req.validationErrors();
 
@@ -152,11 +235,67 @@ exports.postUpdateProfile = (req, res, next) => {
         if (err) {
             return next(err);
         }
-        user.email = req.body.email || '';
-        user.profile.name = req.body.name || '';
-        user.profile.gender = req.body.gender || '';
-        user.profile.location = req.body.location || '';
-        user.profile.website = req.body.website || '';
+        //TODO: need to upload/manage profile pictures here too, maybe we could move it elsewhere
+
+        // General information
+        user.email = req.body.email || req.user.email || '';
+        user.profile.name = req.body.name || req.user.name || '';
+        user.profile.birthday = req.body.birthday || req.user.birthday || '';
+        user.profile.age = req.user.age || getAgeFromBirthday(user.profile.birthday) || '';
+        user.profile.gender = req.body.gender || req.user.gender || '';
+
+        //TODO: we might need zipcodes to get the locations, might be easier to do here rather than from the client side
+        //TODO: not sure what to do with the locations pulled from linkedin, facebook, etc.
+        user.profile.zipcode = req.body.zipcode || req.user.zipcode || '';
+        user.profile.summary = req.body.summary || req.user.summary || '';
+        user.profile.astrologicalSign = req.user.astrologicalSign || getAstrologicalSign(user.profile.birthday) || '';
+
+        // Physical appearance
+        user.profile.eyeColor = req.body.eyeColor || req.user.eyeColor || '';
+        user.profile.hairColor = req.body.hairColor || req.user.hairColor || '';
+        user.profile.heightInches = req.body.heightInches || req.user.heightInches || '';
+        user.profile.weightPounds = req.body.weightPounds || req.user.weightPounds || '';
+        user.profile.fitnessLevel = req.body.fitnessLevel || req.user.fitnessLevel || '';
+
+        // Culture
+        user.profile.ethnicity = req.body.ethnicity || req.user.ethnicity || '';
+        user.profile.language = req.body.language || req.user.language || '';
+        user.profile.religion = req.body.religion || req.user.religion || '';
+        user.profile.education = req.body.education || req.user.education || '';
+
+        // Dating Purpose
+        user.profile.messageMeIf = req.body.messageMeIf || req.user.messageMeIf || '';
+        user.profile.doNotMessageIf = req.body.doNotMessageIf || req.user.doNotMessageIf || '';
+        user.profile.genderInterests = req.body.genderInterests || req.user.genderInterests || '';
+
+        // Lifestyle
+        user.profile.diet = req.body.diet || req.user.diet || '';
+        user.profile.caffeine = req.body.caffeine || req.user.caffeine || '';
+        user.profile.alcohol = req.body.alcohol || req.user.alcohol || '';
+        user.profile.tobacco = req.body.tobacco || req.user.tobacco || '';
+        user.profile.weed = req.body.weed || req.user.weed || '';
+        user.profile.otherDrugs = req.body.otherDrugs || req.user.otherDrugs || '';
+
+        // Pets
+        user.profile.cats = req.body.cats || req.user.cats || '';
+        user.profile.dogs = req.body.dogs || req.user.dogs || '';
+        user.profile.reptiles = req.body.reptiles || req.user.reptiles || '';
+        user.profile.birds = req.body.birds || req.user.birds || '';
+        user.profile.otherPets = req.body.otherPets || req.user.otherPets || '';
+
+        // Kids
+        user.profile.currentKids = req.body.currentKids || req.user.currentKids || '';
+        user.profile.wantMoreKids = req.body.wantMoreKids || req.user.wantMoreKids || '';
+
+        // Logistics
+        user.profile.minAge = req.body.minAge || req.user.minAge || '';
+        user.profile.maxAge = req.body.maxAge || req.user.maxAge || '';
+        user.profile.relationshipTypes = req.body.relationshipTypes || req.user.relationshipTypes || '';
+        user.profile.minDistanceMiles = req.body.minDistanceMiles || req.user.minDistanceMiles || '';
+        user.profile.maxDistanceMiles = req.body.maxDistanceMiles || req.user.maxDistanceMiles || '';
+        user.profile.minMatchPercent = req.body.minMatchPercent || req.user.minMatchPercent || '';
+        user.profile.maxMatchPercent = req.body.maxMatchPercent || req.user.maxMatchPercent || '';
+
         user.save((err) => {
             if (err) {
                 if (err.code === 11000) {
@@ -392,8 +531,8 @@ exports.postForgot = (req, res, next) => {
             });
             const mailOptions = {
                 to: user.email,
-                from: 'hackathon@starter.com',
-                subject: 'Reset your password on Hackathon Starter',
+                from: 'support@fourthmouse.com',
+                subject: 'Reset your Fourth Mouse account password',
                 text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
           Please click on the following link, or paste this into your browser to complete the process:\n\n
           http://${req.headers.host}/reset/${token}\n\n
@@ -411,4 +550,6 @@ exports.postForgot = (req, res, next) => {
         res.redirect('/forgot');
     });
 };
+
+
 

@@ -18,62 +18,67 @@ const userSchema = new mongoose.Schema({
     tokens: Array,
 
     profile: {
+        // Was the profile auto populated from social media sites? -- not sure if we really care
+        autoPopulated: {type: Boolean, required: true, default: false},
+
+        // General information
         name: String,
         birthday: Date,
         gender: String,
         location: String,
-        picture: String,
+        zipcode: Number,
+        picture: [String],
+        summary: String,
+        astrologicalSign: String,
 
-        physicalAppearance: {
-            eyeColor: String,
-            hairColor: String,
-            heightInches: Number,
-            weightPounds: Number,
-            fitnessLevel: Number,
-        },
+        // Physical appearance
+        eyeColor: String,
+        hairColor: String,
+        heightInches: Number,
+        weightPounds: Number,
+        fitnessLevel: Number,
 
+        // Culture
         ethnicity: [String],
         language: [String],
         religion: [String],
         education: [String],
 
-        drugs: {
-            caffeine: Boolean,
-            alcohol: Boolean,
-            tobacco: Boolean,
-            weed: Boolean,
-            other: String,
-        },
-
-        pets: {
-            cats: Boolean,
-            dogs: Boolean,
-            reptiles: Boolean,
-            birds: Boolean,
-            other: String,
-        },
-
-        astrologicalSign: String,
+        // Lifestyle
         diet: String,
+        caffeine: Boolean,
+        alcohol: Boolean,
+        tobacco: Boolean,
+        weed: Boolean,
+        otherDrugs: String,
 
-        summary: String,
+        // Pets
+        cats: Boolean,
+        dogs: Boolean,
+        reptiles: Boolean,
+        birds: Boolean,
+        otherPets: String,
 
+        // Kids
+        currentKids: Number,
+        wantMoreKids: Boolean,
+
+        // Dating Purpose
         messageMeIf: String,
         doNotMessageIf: String,
+        genderInterests: [String],
 
-        interests: [{type: mongoose.Schema.Types.ObjectId, ref: 'Interest'}],
-
-        matchPreferences: {
-            genderInterests: [String],
-            minAge: Number,
-            maxAge: Number,
-            relationshipTypes: [String],
-            minDistanceMiles: Number,
-            maxDistanceMiles: Number,
-            minMatchPercent: Number,
-            maxMatchPercent: Number,
-        },
+        // Logistics
+        minAge: Number,
+        maxAge: Number,
+        relationshipTypes: [String],
+        minDistanceMiles: Number,
+        maxDistanceMiles: Number,
+        minMatchPercent: Number,
+        maxMatchPercent: Number,
     },
+
+    interests: [{type: mongoose.Schema.Types.ObjectId, ref: 'Interest'}],
 
     // message aggregation: http://stackoverflow.com/questions/26486522/mongoose-how-can-i-get-a-list-of-conversations-a-sepcific-user-has-chatted-with
     messages: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message'}],

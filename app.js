@@ -22,8 +22,8 @@ const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
 const multer = require('multer');
-
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
+
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -48,6 +48,16 @@ const passportConfig = require('./config/passport');
  * Create Express server.
  */
 const app = express();
+
+/***
+ * add underscore, underscore strings, and moment for making it easier to do stuff in jade
+ * https://coderwall.com/p/egh53a/making-use-of-utility-libraries-in-server-side-jade-templates
+ * @type {_|exports}
+ * @private
+ */
+app.locals._      = require('underscore');
+app.locals._.str  = require('underscore.string');
+app.locals.moment = require('moment');
 
 /**
  * Connect to MongoDB.
@@ -115,7 +125,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
-
+app.locals.moment = require('moment');
 /**
  * Primary app routes.
  */

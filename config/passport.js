@@ -121,6 +121,9 @@ passport.use(new FacebookStrategy({
                     user.profile.name = `${profile.name.givenName} ${profile.name.familyName}`;
                     user.profile.gender = profile._json.gender;
                     user.profile.picture = `https://graph.facebook.com/${profile.id}/picture?type=large`;
+
+                    //https://developers.facebook.com/docs/graph-api/reference/location/
+                    // might want the lat/long coords at some point
                     user.profile.location = (profile._json.location) ? profile._json.location.name : '';
                     user.save((err) => {
                         done(err, user);
@@ -352,6 +355,8 @@ passport.use(new OpenIDStrategy({
     });
   });
 }));
+
+// TODO: need middleware to determine if the user has connected multiple accounts or something for verifying user before granting access to matches.
 
 /**
  * Login Required middleware.

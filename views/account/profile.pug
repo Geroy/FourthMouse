@@ -1,6 +1,9 @@
 extends ../layout
 
+append head
+
 block content
+
   .page-header
     h3 Profile Information
 
@@ -16,24 +19,28 @@ block content
         input.form-control(type='text', name='name', id='name', value=user.profile.name)
     .form-group
       label.col-sm-3.control-label Gender
-      .col-sm-6
-        label.radio.col-sm-3
+      .col-sm-7
+        label.radio-inline.col-sm-3
           input(type='radio', checked=user.profile.gender=='male', name='gender', value='male', data-toggle='radio')
           span Male
-        label.radio.col-sm-3
+        label.radio-inline.col-sm-3
           input(type='radio', checked=user.profile.gender=='female', name='gender', value='female', data-toggle='radio')
           span Female
-        label.radio.col-sm-3
+        label.radio-inline.col-sm-3
           input(type='radio', checked=user.profile.gender=='other', name='gender', value='other', data-toggle='radio')
           span Other
     .form-group
-      label.col-sm-3.control-label(for='location') Location
+      label.col-sm-3.control-label Age Preferences
       .col-sm-7
-        input.form-control(type='text', name='location', id='location', value=user.profile.location)
+
     .form-group
-      label.col-sm-3.control-label(for='description') Description
+      label.col-sm-3.control-label(for='zipcode') zipcode
       .col-sm-7
-        textarea.form-control(type='text', name='description', id='description', value=user.profile.description)
+        input.form-control(type='text', name='zipcode', id='zipcode', value=user.profile.zipcode)
+    .form-group
+      label.col-sm-3.control-label(for='summary') Summary
+      .col-sm-7
+        input.form-control(type='text', name='summary', id='summary', value=user.profile.summary)
     .form-group
       .col-sm-offset-3.col-sm-4
         button.btn.btn.btn-primary(type='submit')
