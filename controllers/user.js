@@ -150,7 +150,7 @@ function getAstrologicalSign(date){
     if (_.isDate(birthday)){
         // Set the user's astrological sign based on the horoscope
         sign = horoscope.getSign({month: birthday.getMonth(),
-            day: birthday.getDate()});
+            day: birthday.getDay()});
     }
 
     return sign;
@@ -166,9 +166,16 @@ function getAgeFromBirthday(date){
 
     // Get the birthday from the user's profile
     var birthday = new Date(date);
+
     if (_.isDate(birthday)){
         // Set the user's astrological sign based on the horoscope
-        age = _.now().getYear() - birthday.getYear();
+        var currentTime = new Date(_.now());
+
+        console.log('currentTime' + currentTime);
+        console.log('currentTime.year' + currentTime.getYear());
+
+        console.log('current year=' + currentTime.getYear() + ' birthday year=' + birthday.getYear());
+        age = currentTime.getYear() - birthday.getYear();
     }
 
     return age;
@@ -179,8 +186,8 @@ function getAgeFromBirthday(date){
  * Update profile information.
  */
 exports.postUpdateProfile = (req, res, next) => {
-    req.assert('email', 'Please enter a valid email address.').isEmail();
-    req.assert('zipcode', 'Please enter a valid ZIP code').len(4,5).isInt();
+    req.check('email', 'Please enter a valid email address.').isEmail();
+    req.check('zipcode', 'Please enter a valid ZIP code').len(4,5).isInt();
     req.sanitize('email').normalizeEmail({remove_dots: false});
     req.sanitizeBody('name');
     req.sanitizeBody('birthday').toDate();
@@ -213,7 +220,30 @@ exports.postUpdateProfile = (req, res, next) => {
     req.sanitizeBody('messageMeIf');
     req.sanitizeBody('doNotMessageIf');
     req.sanitizeBody('genderInterests');
+    req.check({
+        'minAge': {
+            isInt: {
+                options: {
+                    min: '18',
+                    max: req.body.maxAge
+                },
+                errorMessage: 'Minimum age must be between 18 and the maximum age you entered.'
+            }
+        }
+    });
     req.sanitizeBody('minAge').toInt();
+    req.check({
+        'maxAge': {
+            isInt: {
+                options: {
+                    min: req.body.minAge,
+                    max: '99'
+                },
+                errorMessage: 'Maximum age must be between the minimum age you entered and 99 (sorry old people, props for getting here though)'
+            }
+        }
+    });
+
     req.sanitizeBody('maxAge').toInt();
     req.sanitizeBody('relationshipTypes');
     req.sanitizeBody('minDistanceMiles').toInt();

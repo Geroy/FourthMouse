@@ -30,9 +30,13 @@ block content
           input(type='radio', checked=user.profile.gender=='other', name='gender', value='other', data-toggle='radio')
           span Other
     .form-group
-      label.col-sm-3.control-label Age Preferences
+      label.col-sm-3.control-label Min. Match Age
       .col-sm-7
-
+        input.form-control(type='number', name='minAge', id='minAge', value=user.profile.minAge)
+    .form-group
+      label.col-sm-3.control-label Max. Match Age
+      .col-sm-7
+        input.form-control(type='number', name='maxAge', id='maxAge', value=user.profile.maxAge)
     .form-group
       label.col-sm-3.control-label(for='zipcode') zipcode
       .col-sm-7
